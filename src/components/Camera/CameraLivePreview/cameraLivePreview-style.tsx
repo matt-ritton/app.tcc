@@ -1,15 +1,12 @@
-import React from "react";
 import styled from "styled-components/native";
 
 export const Icon = styled.Image`
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
 `;
 
-
-
 export const UpperContainer = styled.View`
-  flex: 1;
+  height: 40px;
   flex-direction: row;
   margin: 40px 16px 0 16px;
   justify-content: space-between;
