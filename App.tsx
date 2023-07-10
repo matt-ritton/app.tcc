@@ -1,7 +1,7 @@
 import React from "react";
 import { useFonts } from "expo-font";
 import Routes from "./src/screens/routes";
-import { NativeBaseProvider, Text, Box } from "native-base";
+import { extendTheme, NativeBaseProvider } from "native-base";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -16,9 +16,18 @@ export default function App() {
     return null;
   }
 
+  const theme = extendTheme({
+    colors: {
+      primary: {
+        600: "#6db611",
+        800: "#5E9F0F",
+      },
+    },
+  });
+
   return (
     <>
-      <NativeBaseProvider>
+      <NativeBaseProvider theme={theme}>
         <Routes />
       </NativeBaseProvider>
     </>

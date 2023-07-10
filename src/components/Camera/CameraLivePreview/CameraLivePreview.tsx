@@ -1,9 +1,4 @@
-import {
-  faBolt,
-  faChevronLeft,
-  faImages,
-  faRepeat,
-} from "@fortawesome/free-solid-svg-icons";
+import { faImages, faRepeat } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { Ionicons } from "@expo/vector-icons";
 import { Camera, CameraType, FlashMode } from "expo-camera";
@@ -12,16 +7,21 @@ import { TouchableOpacity, View } from "react-native";
 import {
   BottomContainer,
   CameraButton,
-  Icon,
   ShutterButton,
   ShutterButtonOutline,
   UpperContainer,
 } from "./cameraLivePreview-style";
 import * as ImagePicker from "expo-image-picker";
+import { Modal, Text, VStack } from "native-base";
 
-const CameraLivePreview = ({navigation, setPreviewVisible, setCapturedPhoto}: any) => {
+const CameraLivePreview = ({
+  navigation,
+  setPreviewVisible,
+  setCapturedPhoto,
+}: any) => {
   const [type, setType] = useState(CameraType.back);
   const [flashMode, setFlashMode] = useState(FlashMode.off);
+  const [showModal, setShowModal] = useState(false);
 
   let camera: Camera | null;
 
@@ -34,7 +34,12 @@ const CameraLivePreview = ({navigation, setPreviewVisible, setCapturedPhoto}: an
   const _takePicture = async () => {
     if (!camera) return;
     const photo = await camera.takePictureAsync();
-    console.log("Foto capturada", photo);
+    const availableSizes = camera
+      .getAvailablePictureSizesAsync("16:9")
+      .then((sizes) => {
+        console.log(sizes);
+      });
+    console.log("Tamanhos disponíveis", availableSizes);
     setPreviewVisible(true);
     setCapturedPhoto(photo);
   };
@@ -60,10 +65,17 @@ const CameraLivePreview = ({navigation, setPreviewVisible, setCapturedPhoto}: an
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", backgroundColor: "#000"}}>
-      <UpperContainer>
-          <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-            <FontAwesomeIcon size={20} color={"#fff"} icon={faChevronLeft} />
+    <>
+      <View
+        style={{ flex: 1, justifyContent: "center", backgroundColor: "#000" }}
+      >
+        <UpperContainer>
+          <TouchableOpacity onPress={() => setShowModal(true)}>
+            <Ionicons
+              name="information-circle-outline"
+              size={30}
+              color={"#fff"}
+            />
           </TouchableOpacity>
           <TouchableOpacity onPress={_handleFlashMode}>
             {flashMode == "off" ? (
@@ -73,28 +85,46 @@ const CameraLivePreview = ({navigation, setPreviewVisible, setCapturedPhoto}: an
             )}
           </TouchableOpacity>
         </UpperContainer>
-      <Camera
-        flashMode={flashMode}
-        style={{ height: 640 }}
-        type={type}
-        ratio="16:9"
-        ref={(ref) => {
-          camera = ref;
-        }}
-      >
-        <BottomContainer>
-          <CameraButton onPress={_imagePicker}>
-            <FontAwesomeIcon size={20} color={"#fff"} icon={faImages} />
-          </CameraButton>
-          <ShutterButtonOutline>
-            <ShutterButton onPress={_takePicture} />
-          </ShutterButtonOutline>
-          <CameraButton onPress={toggleCameraType}>
-            <FontAwesomeIcon size={20} color={"#fff"} icon={faRepeat} />
-          </CameraButton>
-        </BottomContainer>
-      </Camera>
-    </View>
+        <Camera
+          flashMode={flashMode}
+          style={{ height: 640 }}
+          type={type}
+          ratio="16:9"
+          ref={(ref) => {
+            camera = ref;
+          }}
+        >
+          <BottomContainer>
+            <CameraButton onPress={_imagePicker}>
+              <FontAwesomeIcon size={20} color={"#fff"} icon={faImages} />
+            </CameraButton>
+            <ShutterButtonOutline>
+              <ShutterButton onPress={_takePicture} />
+            </ShutterButtonOutline>
+            <CameraButton onPress={toggleCameraType}>
+              <FontAwesomeIcon size={20} color={"#fff"} icon={faRepeat} />
+            </CameraButton>
+          </BottomContainer>
+        </Camera>
+      </View>
+
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+        <Modal.Content maxWidth="400px">
+          <Modal.CloseButton />
+          <Modal.Header>Como fazer o diagnóstico?</Modal.Header>
+          <Modal.Body>
+            <VStack space={4}>
+              <Text>
+                1. Tire uma foto próxima e focada nos danos encontrados.
+              </Text>
+              <Text>
+                2. Certifique-se de tirar a foto em um ambiente bem iluminado.
+              </Text>
+            </VStack>
+          </Modal.Body>
+        </Modal.Content>
+      </Modal>
+    </>
   );
 };
 

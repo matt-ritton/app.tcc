@@ -9,15 +9,21 @@ export const UpperContainer = styled.View`
   height: 40px;
   flex-direction: row;
   margin: 40px 16px 0 16px;
+  align-items: center;
   justify-content: space-between;
   align-items: flex-start;
 `;
 
 export const BottomContainer = styled.View`
-  flex: 1;
+  position: absolute;
+  height: 25%;
+  width: 100%;
+  bottom: 0;
   flex-direction: row;
+  margin-bottom: -24px;
   justify-content: center;
   align-items: flex-end;
+  background-color: rgba(0, 0, 0, 0.7);
 `;
 
 export const CameraButton = styled.TouchableOpacity`

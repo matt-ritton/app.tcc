@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
-import React, { useState } from "react";
+import React from "react";
 import CameraScreen from "./CameraScreen/CameraScreen";
 import DatabaseScreen from "./DatabaseScreen/DatabaseScreen";
 import HomeScreen from "./HomeScreen/HomeScreen";
@@ -32,11 +32,6 @@ export default function Routes() {
           tabBarActiveTintColor: "#fff",
           tabBarInactiveTintColor: "#e2e2e2",
           tabBarShowLabel: false,
-          lazy: true,
-          lazyPreloadDistance: 2,
-          tabBarContentContainerStyle: {
-            overflow: "visible",
-          },
           tabBarStyle: {
             paddingBottom: 5,
             backgroundColor: "#6db611",
